@@ -141,7 +141,8 @@ async def check_mysql(
     }
     for var_name, var_type in STATUS_VARS.items():
         if var_name in status:
-            item[var_name] = var_type(status[var_name])
+            name = var_name.lower()  # lowercase metricnames
+            item[name] = var_type(status[var_name])
 
     item_variables = {
         'name': 'variables',

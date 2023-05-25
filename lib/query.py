@@ -57,3 +57,17 @@ async def query(conn: aiomysql.Connection, query: str) -> list:
         raise CheckException(error_msg)
 
     return items
+
+
+async def query_flat(conn: aiomysql.Connection, query: str) -> list:
+    try:
+        async with conn.cursor() as cursor:
+            await cursor.execute(query)
+            item = dict(await cursor.fetchall())
+
+    except Exception as e:
+        error_msg = str(e) or type(e).__name__
+        logging.exception(f'query error: {error_msg};')
+        raise CheckException(error_msg)
+    else:
+        return item

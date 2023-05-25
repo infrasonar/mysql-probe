@@ -26,6 +26,7 @@ docker build -t mysql-probe . --no-cache
 ## Dry run
 
 Available checks:
+- `innodb`
 - `mysql`
 
 Create a yaml file, for example _(test.yaml)_:

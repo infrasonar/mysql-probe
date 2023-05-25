@@ -1,1 +1,2 @@
+aiomysql==1.0.3
 libprobe==0.2.31

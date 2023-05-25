@@ -36,13 +36,11 @@ asset:
   check: "mysql"
   config:
     address: "192.168.1.2"
-    interval: 1
-    count: 5
-    timeout: 5
+    port: 3306  # not required, default MYSQL port is 3306
 ```
 
 Run the probe with the `DRY_RUN` environment variable set the the yaml file above.
 
 ```
 DRY_RUN=test.yaml python main.py
-```# mysql-probe
+```

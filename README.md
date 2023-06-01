@@ -3,6 +3,8 @@
 
 # InfraSonar MySQL Probe
 
+Documentation: https://docs.infrasonar.com/collectors/probes/mysql/
+
 ## Environment variable
 
 Variable            | Default                        | Description

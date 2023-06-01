@@ -352,6 +352,10 @@ def get_stats_from_innodb_status(innodb_status_text):
                 innodb_buffer_pool_pages_used /
                 results['buffer_pool_pages_total']
             )
+        else:
+            # Ensure float
+            results['buffer_pool_pages_total'] = \
+                float(results['buffer_pool_pages_total'])
 
         if 'buffer_pool_bytes_used' not in results:
             results['buffer_pool_bytes_used'] = \

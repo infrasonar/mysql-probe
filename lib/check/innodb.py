@@ -4,7 +4,6 @@ from collections import defaultdict
 from libprobe.asset import Asset
 from libprobe.exceptions import IgnoreCheckException
 from lib.query import get_conn, query
-from ..innodb_metrics import get_stats_from_innodb_status
 
 
 QUERY_HAS_INNODB = """\
@@ -377,6 +376,7 @@ async def check_innodb(
         res = await query(conn, "SHOW /*!50000 ENGINE*/ INNODB STATUS")
         assert len(res), 'no INNODB STATUS metrics found'
         stats = get_stats_from_innodb_status(res[0]['Status'])
+        stats['name'] = 'innodb'
     finally:
         conn.close()
 

@@ -38,8 +38,8 @@ asset:
   name: "foo.local"
   check: "mysql"
   config:
-    username: "USERNAME"
-    password: "PASSWORD"
+    address: "192.168.1.2"
+    port: 3306  # not required, default MYSQL port is 3306
 ```
 
 Run the probe with the `DRY_RUN` environment variable set the the yaml file above.

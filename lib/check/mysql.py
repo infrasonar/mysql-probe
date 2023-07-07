@@ -121,6 +121,7 @@ VARIABLES_VARS = {
     'query_cache_size': int,
     'table_open_cache': int,
     'thread_cache_size': int,
+    'long_query_time': float,
 }
 
 

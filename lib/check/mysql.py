@@ -114,8 +114,7 @@ STATUS_VARS = {
 }
 
 VARIABLES_VARS = {
-    'Key_buffer_size': int,
-    'Key_cache_utilization': int,
+    'key_buffer_size': int,
     'max_connections': int,
     'max_prepared_stmt_count': int,
     'query_cache_size': int,

@@ -1,3 +1,10 @@
+"""MySQL Check
+Status:
+https://dev.mysql.com/doc/refman/8.0/en/server-status-variable-reference.html
+
+Server variables:
+https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html
+"""
 from libprobe.asset import Asset
 from lib.query import get_conn, query_flat
 

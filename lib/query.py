@@ -59,7 +59,7 @@ async def query(conn: aiomysql.Connection, query: str) -> list:
     return items
 
 
-async def query_flat(conn: aiomysql.Connection, query: str) -> list:
+async def query_flat(conn: aiomysql.Connection, query: str) -> dict:
     try:
         async with conn.cursor() as cursor:
             await cursor.execute(query)

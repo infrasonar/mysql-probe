@@ -4,6 +4,7 @@ import decimal
 import logging
 from libprobe.asset import Asset
 from libprobe.exceptions import CheckException
+from . import DOCS_URL
 
 
 DEFAULT_MYSQL_PORT = 3306
@@ -16,15 +17,21 @@ async def get_conn(
     address = config.get('address')
     if not address:
         address = asset.name
-    assert asset_config, 'missing credentials'
     port = config.get('port', DEFAULT_MYSQL_PORT)
+    username = asset_config.get('username')
+    password = asset_config.get('password')
+    if username is None or password is None:
+        raise CheckException(
+            'Missing credentials. Please refer to the following documentation'
+            f' for detailed instructions: <{DOCS_URL}>'
+        )
 
     try:
         conn = await aiomysql.connect(
             host=address,
             port=port,
-            user=asset_config['username'],
-            password=asset_config['password'],
+            user=username,
+            password=password,
         )
     except Exception as e:
         error_msg = str(e) or type(e).__name__

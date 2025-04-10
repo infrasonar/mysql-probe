@@ -4,6 +4,7 @@ from collections import defaultdict
 from libprobe.asset import Asset
 from libprobe.exceptions import IgnoreCheckException
 from lib.query import get_conn, query
+from typing import Dict, Any
 
 
 QUERY_HAS_INNODB = """\
@@ -14,8 +15,8 @@ WHERE engine='InnoDB' and support != 'no' and support != 'disabled'
 QUERY = "SHOW /*!50000 ENGINE*/ INNODB STATUS"
 
 
-def get_stats_from_innodb_status(innodb_status_text):
-    results = defaultdict(int)
+def get_stats_from_innodb_status(innodb_status_text) -> Dict[str, Any]:
+    results: Dict[str, Any] = defaultdict(int)
 
     # Here we now parse InnoDB STATUS one line at a time
     # This is heavily inspired by the Percona monitoring plugins work

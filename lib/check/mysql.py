@@ -7,6 +7,7 @@ https://dev.mysql.com/doc/refman/8.0/en/server-system-variable-reference.html
 """
 from libprobe.asset import Asset
 from lib.query import get_conn, query_flat
+from typing import Dict, Any
 
 
 QUERY_STATUS = "SHOW /*!50002 GLOBAL */ STATUS"
@@ -143,7 +144,7 @@ async def check_mysql(
     finally:
         conn.close()
 
-    item = {
+    item: Dict[str, Any] = {
         'name': 'status',
     }
     for var_name, var_type in STATUS_VARS.items():
@@ -151,7 +152,7 @@ async def check_mysql(
             name = var_name.lower()  # lowercase metricnames
             item[name] = var_type(status[var_name])
 
-    item_variables = {
+    item_variables: Dict[str, Any] = {
         'name': 'variables',
     }
     for var_name, var_type in VARIABLES_VARS.items():

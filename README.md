@@ -25,6 +25,15 @@ Variable            | Default                        | Description
 docker build -t mysql-probe . --no-cache
 ```
 
+## Config
+
+```yaml
+mysql:
+  config:
+    username: "my_account@domain"
+    password: "my_password"
+```
+
 ## Dry run
 
 Available checks:

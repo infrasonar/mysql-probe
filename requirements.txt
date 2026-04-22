@@ -1,2 +1,2 @@
-aiomysql==0.2.0
-libprobe==0.3.0
+aiomysql==0.3.2
+libprobe==2.0.6

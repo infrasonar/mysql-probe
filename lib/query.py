@@ -12,14 +12,14 @@ DEFAULT_MYSQL_PORT = 3306
 
 async def get_conn(
         asset: Asset,
-        asset_config: dict,
+        local_config: dict,
         config: dict) -> aiomysql.Connection:
     address = config.get('address')
     if not address:
         address = asset.name
     port = config.get('port', DEFAULT_MYSQL_PORT)
-    username = asset_config.get('username')
-    password = asset_config.get('password')
+    username = local_config.get('username')
+    password = local_config.get('password')
     if username is None or password is None:
         raise CheckException(
             'Missing credentials. Please refer to the following documentation'

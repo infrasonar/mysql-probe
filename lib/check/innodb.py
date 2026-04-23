@@ -371,6 +371,7 @@ def get_stats_from_innodb_status(innodb_status_text) -> dict[str, Any]:
 
 class CheckInnoDb(Check):
     key = 'innodb'
+    unchanged_eol = 0
 
     @staticmethod
     async def run(asset: Asset, local_config: dict, config: dict) -> dict:

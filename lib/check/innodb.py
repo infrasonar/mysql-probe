@@ -16,7 +16,7 @@ WHERE engine='InnoDB' and support != 'no' and support != 'disabled'
 QUERY = "SHOW /*!50000 ENGINE*/ INNODB STATUS"
 
 
-def get_stats_from_innodb_status(innodb_status_text) -> dict[str, Any]:
+def get_stats_from_innodb_status(innodb_status_text: str) -> dict[str, Any]:
     results: dict[str, Any] = defaultdict(int)
 
     # Here we now parse InnoDB STATUS one line at a time

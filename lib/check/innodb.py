@@ -2,9 +2,10 @@ import logging
 import re
 from collections import defaultdict
 from libprobe.asset import Asset
+from libprobe.check import Check
 from libprobe.exceptions import IgnoreCheckException
 from lib.query import get_conn, query
-from typing import Dict, Any
+from typing import Any
 
 
 QUERY_HAS_INNODB = """\
@@ -15,8 +16,8 @@ WHERE engine='InnoDB' and support != 'no' and support != 'disabled'
 QUERY = "SHOW /*!50000 ENGINE*/ INNODB STATUS"
 
 
-def get_stats_from_innodb_status(innodb_status_text) -> Dict[str, Any]:
-    results: Dict[str, Any] = defaultdict(int)
+def get_stats_from_innodb_status(innodb_status_text: str) -> dict[str, Any]:
+    results: dict[str, Any] = defaultdict(int)
 
     # Here we now parse InnoDB STATUS one line at a time
     # This is heavily inspired by the Percona monitoring plugins work
@@ -368,23 +369,25 @@ def get_stats_from_innodb_status(innodb_status_text) -> Dict[str, Any]:
     return results
 
 
-async def check_innodb(
-        asset: Asset,
-        asset_config: dict,
-        config: dict) -> dict:
+class CheckInnoDb(Check):
+    key = 'innodb'
+    unchanged_eol = 0
 
-    conn = await get_conn(asset, asset_config, config)
-    try:
-        res = await query(conn, QUERY_HAS_INNODB)
-        if len(res) == 0:
-            raise IgnoreCheckException
-        res = await query(conn, "SHOW /*!50000 ENGINE*/ INNODB STATUS")
-        assert len(res), 'no INNODB STATUS metrics found'
-        stats = get_stats_from_innodb_status(res[0]['Status'])
-        stats['name'] = 'innodb'
-    finally:
-        conn.close()
+    @staticmethod
+    async def run(asset: Asset, local_config: dict, config: dict) -> dict:
 
-    return {
-        'innodb': [stats]
-    }
+        conn = await get_conn(asset, local_config, config)
+        try:
+            res = await query(conn, QUERY_HAS_INNODB)
+            if len(res) == 0:
+                raise IgnoreCheckException
+            res = await query(conn, "SHOW /*!50000 ENGINE*/ INNODB STATUS")
+            assert len(res), 'no INNODB STATUS metrics found'
+            stats = get_stats_from_innodb_status(res[0]['Status'])
+            stats['name'] = 'innodb'
+        finally:
+            conn.close()
+
+        return {
+            'innodb': [stats]
+        }

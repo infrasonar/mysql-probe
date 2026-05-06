@@ -1,15 +1,15 @@
 from libprobe.probe import Probe
-from lib.check.innodb import check_innodb
-from lib.check.mysql import check_mysql
+from lib.check.innodb import CheckInnoDb
+from lib.check.mysql import CheckMySql
 from lib.version import __version__ as version
 
 
 if __name__ == '__main__':
-    checks = {
-        'innodb': check_innodb,
-        'mysql': check_mysql,
-    }
+    checks = (
+        CheckInnoDb,
+        CheckMySql,
+    )
 
-    probe = Probe("mysql", version, checks)
+    probe = Probe("mysql", version, checks, loggers=('aiomysql',))
 
     probe.start()

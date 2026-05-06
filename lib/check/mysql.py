@@ -6,8 +6,9 @@ Server variables:
 https://dev.mysql.com/doc/refman/8.0/en/server-system-variable-reference.html
 """
 from libprobe.asset import Asset
+from libprobe.check import Check
 from lib.query import get_conn, query_flat
-from typing import Dict, Any
+from typing import Any
 
 
 QUERY_STATUS = "SHOW /*!50002 GLOBAL */ STATUS"
@@ -132,34 +133,36 @@ VARIABLES_VARS = {
 }
 
 
-async def check_mysql(
-        asset: Asset,
-        asset_config: dict,
-        config: dict) -> dict:
+class CheckMySql(Check):
+    key = 'mysql'
+    unchanged_eol = 0
 
-    conn = await get_conn(asset, asset_config, config)
-    try:
-        status = await query_flat(conn, QUERY_STATUS)
-        variables = await query_flat(conn, QUERY_VARIABLES)
-    finally:
-        conn.close()
+    @staticmethod
+    async def run(asset: Asset, local_config: dict, config: dict) -> dict:
 
-    item: Dict[str, Any] = {
-        'name': 'status',
-    }
-    for var_name, var_type in STATUS_VARS.items():
-        if var_name in status:
-            name = var_name.lower()  # lowercase metricnames
-            item[name] = var_type(status[var_name])
+        conn = await get_conn(asset, local_config, config)
+        try:
+            status = await query_flat(conn, QUERY_STATUS)
+            variables = await query_flat(conn, QUERY_VARIABLES)
+        finally:
+            conn.close()
 
-    item_variables: Dict[str, Any] = {
-        'name': 'variables',
-    }
-    for var_name, var_type in VARIABLES_VARS.items():
-        if var_name in variables:
-            item_variables[var_name] = var_type(variables[var_name])
+        item: dict[str, Any] = {
+            'name': 'status',
+        }
+        for var_name, var_type in STATUS_VARS.items():
+            if var_name in status:
+                name = var_name.lower()  # lowercase metricnames
+                item[name] = var_type(status[var_name])
 
-    return {
-        'status': [item],
-        'variables': [item_variables]
-    }
+        item_variables: dict[str, Any] = {
+            'name': 'variables',
+        }
+        for var_name, var_type in VARIABLES_VARS.items():
+            if var_name in variables:
+                item_variables[var_name] = var_type(variables[var_name])
+
+        return {
+            'status': [item],
+            'variables': [item_variables]
+        }
